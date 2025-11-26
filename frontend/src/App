@@ -1,0 +1,46 @@
+import { useEffect, useState } from "react";
+import LoginForm from "./components/LoginForm";
+import VideoPlayer from "./components/VideoPlayer";
+import VideoList from "./components/VideoList";
+import { setToken, fetchVideos, getStreamUrl } from "./api";
+
+export default function App() {
+  const [authToken, setAuthToken] = useState(null);
+  const [videos, setVideos] = useState([]);
+  const [currentVideo, setCurrentVideo] = useState(null);
+
+  useEffect(() => {
+    if (!authToken) return;
+    setToken(authToken);
+    (async () => {
+      const data = await fetchVideos();
+      setVideos(data);
+      if (data.length > 0) {
+        setCurrentVideo(data[0]); // auto-play first video
+      }
+    })();
+  }, [authToken]);
+
+  if (!authToken) {
+    return <LoginForm onLogin={setAuthToken} />;
+  }
+
+  return (
+    <div className="app" style={{ display: "flex", gap: "16px", padding: "16px" }}>
+      <div style={{ flex: 3 }}>
+        <VideoPlayer
+          video={currentVideo}
+          streamUrl={currentVideo ? getStreamUrl(currentVideo.id) : ""}
+        />
+      </div>
+      <div style={{ flex: 1 }}>
+        <h3>Library</h3>
+        <VideoList
+          videos={videos}
+          currentId={currentVideo?.id}
+          onSelect={setCurrentVideo}
+        />
+      </div>
+    </div>
+  );
+}

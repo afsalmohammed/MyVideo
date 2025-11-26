@@ -1,0 +1,17 @@
+export default function VideoPlayer({ video, streamUrl }) {
+  if (!video) return null;
+  return (
+    <div className="player">
+      <h3>{video.title}</h3>
+      <video
+        key={video.id}
+        controls
+        autoPlay
+        style={{ width: "100%", maxHeight: "60vh" }}
+      >
+        <source src={streamUrl} type="video/mp4" />
+      </video>
+      <p>{video.description}</p>
+    </div>
+  );
+}

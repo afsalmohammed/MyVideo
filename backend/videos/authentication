@@ -1,0 +1,19 @@
+from rest_framework.authentication import BaseAuthentication
+from rest_framework import exceptions
+from django.contrib.auth.models import AnonymousUser
+
+DEMO_USERNAME = "demo"
+DEMO_PASSWORD = "demo123"
+DEMO_TOKEN = "demo-token"
+
+class SimpleTokenAuthentication(BaseAuthentication):
+    def authenticate(self, request):
+        auth = request.headers.get("Authorization")
+        if not auth or not auth.startswith("Token "):
+            return (AnonymousUser(), None)
+        token = auth.removeprefix("Token ").strip()
+        if token != DEMO_TOKEN:
+            raise exceptions.AuthenticationFailed("Invalid token")
+        # Return a dummy user object
+        user = AnonymousUser()
+        return (user, None)

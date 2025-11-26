@@ -1,0 +1,20 @@
+export default function VideoList({ videos, currentId, onSelect }) {
+  return (
+    <div className="video-list">
+      {videos.map((v) => (
+        <div
+          key={v.id}
+          onClick={() => onSelect(v)}
+          style={{
+            cursor: "pointer",
+            padding: "8px",
+            background: v.id === currentId ? "#eee" : "transparent",
+          }}
+        >
+          <strong>{v.title}</strong>
+          <div>{Math.round(v.duration_seconds / 60)} min</div>
+        </div>
+      ))}
+    </div>
+  );
+}

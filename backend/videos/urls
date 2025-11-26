@@ -1,0 +1,9 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path("auth/login/", views.login_view),
+    path("videos/", views.list_videos),
+    path("videos/<int:pk>/", views.video_detail),
+    path("videos/<int:pk>/stream/", views.stream_video),
+]
